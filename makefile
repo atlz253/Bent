@@ -1,6 +1,11 @@
-all:
-# Генерация лексического анализатора
-	flex flex.l    
+# Сборка компилятора
+all: flex bison
+	gcc lex.yy.c bison.tab.c print.c -o compiler
 
-# Компиляция лексического анализатора    
-	gcc .\lex.yy.c    
+# Генерация лексического анализатора
+flex: flex.l
+	flex flex.l
+
+# Генерация синтаксического анализатора    
+bison: bison.y
+	bison -d .\bison.y

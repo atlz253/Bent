@@ -6,33 +6,8 @@
  //
 
 %{
-    #include <stdio.h>
-    #include <stdarg.h>
-    #include <windows.h>
-  
-    #define DEBUG
-
-    void debug_print(const char *format, ...) // Функция отладочной печати
-    {
-    #ifdef DEBUG
-      va_list argPtr;
-      int count;
-
-      va_start(argPtr, format);                  // Получить список переменных параметров
-      fflush(stdout);                            // Принудительно обновить выходной буфер
-      count = vfprintf(stderr, format, argPtr);  // Вывод информации на стандартное устройство потока ошибок
-      va_end(argPtr);                            // Конец списка параметров переменной
-    #endif
-    }
-
-    int reg = 0; // Результат операций
-
-    // Обрабатываемый знак
-    // Поддерживаются следующие операции: + - * /
-    // Переменная равна 0 если в текущий момент отсутствуют знаки для обработки.
-    char op = '+';
-    
-    int unmin = 0; // 0 - обрабатываемое число положительное, 1 - отрицательное 
+    #include "bison.tab.h"
+    #include "print.h"
 %}
 
  //
@@ -42,6 +17,8 @@
  // Создать переменную int yylineno, в которой будет храниться номер текущей строки (удобна для отладки)
 %option yylineno
 
+%option noyywrap
+
  // разделитель области объявлений и области правил языка
 %%
 
@@ -50,121 +27,30 @@
 
 [/][/].*\n      ; // Если встретили комментарий, то ничего не делаем
 
-[0-9]           { // Обработка найденных чисел
-                  int opnd = atoi(yytext);
-
-                  debug_print("Начало обработки числа: %d\n", opnd);
-
-                  if (unmin)
-                  {
-                    opnd = -opnd; 
-                  } 
+[0-9]+          { // Обработка найденных чисел
+                    yylval = atoi(yytext);
                   
-                  unmin = 0;
+                    debug_print("[Лексический анализатор] найдена числовая лексема: %d\n", yylval);
 
-                  switch(op) 
-                  {
-                    case '+':
-                      debug_print("%d + %d = ", reg, opnd);
-
-                      reg += opnd; 
-
-                      debug_print("%d\n", reg);
-
-                      break;
-                    
-                    case '-':
-                      debug_print("%d - %d = ", reg, opnd);
-
-                      reg -= opnd; 
-                      
-                      debug_print("%d\n", reg);
-
-                      break;
-                    
-                    case '*': 
-                      debug_print("%d * %d = ", reg, opnd);
-
-                      reg *= opnd; 
-                      
-                      debug_print("%d\n", reg);
-
-                      break;
-                    
-                    case '/': 
-                      debug_print("%d / %d = ", reg, opnd);
-
-                      reg /= opnd; 
-                      
-                      debug_print("%d\n", reg);
-
-                      break;
-                    default:
-                      debug_print("Не удалось обработать число %d\n", opnd);
-
-                      break;
-                  }
-
-                  op = 0; // Освобождаем переменную под новый знак
-                }
-
-[-+*/]          { // Обработка знаков
-                  if (op) 
-                  {
-                    if (*yytext=='-')
-                    {
-                      unmin = 1;
-                    }
-                    else 
-                    {
-                      printf("Неизвестный знак на строке %d\n", yylineno);
-
-                      exit(1);
-                    }
-                  } 
-                  else
-                  {
-                    op = *yytext;
-                  }
-                }
-
-[;]             { 
-                  if (op) 
-                  {
-                    printf("Неожиданный конец операции на строке %d\n", yylineno);
-                    
-                    exit(1);
-                  }
-
-                  printf("Результат операций равен %d\n", reg);
-                  
-                  reg = 0;
-                  op = '+';
+                    return NUM;  
                 }
 
 [ \t\r\n]       ; // Игнорируем проблемы и переходы на новую строку
 
-.               { // Если не удалось обработать символ
-                  printf("Ошибка синтакса в строке: %d\n", yylineno); 
-                  
-                  exit(1); 
+.               { 
+                    debug_print("[Лексический анализатор] найдена символьная лексема: %c\n", *yytext);
+
+                    return *yytext; 
                 }
+
 %%
 
-// Отвечает за распознование конца входных данных
-// 1 - входные данные закончились, конец работы
-// 0 - продолжить работу с новыми входными данными
-int yywrap()
-{
-  return 1;
-}
-
 // Точка входа в сгенерированный анализатор
-int main()
-{
-  SetConsoleOutputCP(CP_UTF8);
-
-  yylex();
-
-  return 0;
-}
+//int main()
+//{
+//  SetConsoleOutputCP(CP_UTF8);
+//
+//  yylex();
+//
+//  return 0;
+//}
