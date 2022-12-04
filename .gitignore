@@ -5,3 +5,4 @@ bison.tab.c
 bison.tab.h
 compiler.exe
 .vscode/settings.json
+*.py

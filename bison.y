@@ -9,10 +9,11 @@
     #include <list>
     #include <iostream>
     #include <windows.h>
-    
+
+    #include "flex.h"
     #include "print.h"
     #include "abstract.h"   
-    
+
     #define TOKENPASTE(x, y) x ## y
 #define TOKENPASTE2(x, y) TOKENPASTE(x, y)
 #define foreach(i, list) typedef typeof(list) TOKENPASTE2(T,__LINE__); \
@@ -20,6 +21,9 @@
 
     extern int yylineno;
     extern int yylex();
+
+    extern FILE* yyin;
+    extern FILE* yyout;
 
     class block : public oper_t {
         std::list<oper_t*> ops;
@@ -180,7 +184,7 @@ std::string replaceAll(const std::string &where, const std::string &what, const 
 %token EQ LE GE NE
 
  // Объявление токена - десятичного числа
-%token STRING NUM ID END
+%token STRING NUM ID
 
 %type<str> ID NUM STRING
 %type<oper> OPS OP1 OP2 OP
@@ -190,13 +194,12 @@ std::string replaceAll(const std::string &where, const std::string &what, const 
  // Разделитель области объявлений и области правил грамматики
 %%
 
-PROGRAM:    OPS END  {
+PROGRAM:    OPS {
                     debug_print("[Синтаксический анализатор] печать результата\n");
                     $1->print(); 
                     delete $1;
                     return 0; 
                  }
-|           END {return 0;}
 ;
 
 OPS:    OP
@@ -350,12 +353,54 @@ ARG:    EXPR
 
 %%
 
+void print_help()
+{
+    std::cout << std::endl << "Транслятор Bent™" << std::endl << std::endl
+              << "Превращает великолепный Bent Code™ в Python Code" << std::endl
+              << "------------------------------------------------" << std::endl << std::endl
+              << "--help - Выводит данное сообщение" << std::endl << std::endl
+              << "Пользоваться данным транслятором достаточно просто:" << std::endl
+              << "./compiler.exe inputFile.b [outputFile.py]"  << std::endl
+              << '\t' << "inputFile.b - файл с Bent Code™, который вы хотите транслировать в код на Python" << std::endl
+              << '\t' << "outputFile.py (по умолчанию out.py) - файл для записи полученного кода на Python" << std::endl << std::endl;
+}
+
  // Точка входа в сгенерированный анализатор
-int main()
+int main(int argc, char *argv[])
 {
     SetConsoleOutputCP(CP_UTF8);
 
-    yyparse();
+    if (argc == 2 && !strcmp(argv[1], "--help"))
+    {
+        print_help();
+    }
+    else if (argc == 3 || argc == 2)
+    {
+        const char* inputFileName = argv[1];
+
+        if ((yyin = fopen(inputFileName, "r")) == NULL)
+        {
+            yyerror("Не удалось открыть входной файл");
+
+            return -1;
+        }
+
+        const char* outFileName = (argc == 2) ? "out.py" : argv[2];
+
+        if ((yyout = fopen(outFileName, "w")) == NULL)
+        {
+            yyerror("Не удалось открыть выходной файл");
+
+            return -1;
+        }
+
+        yyparse();
+    }
+    else
+    {
+        print_help();
+    }
+
    
     return 0;
 }

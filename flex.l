@@ -6,6 +6,8 @@
  //
 
 %{
+    #include "flex.h"
+
     #include <string>
     #include "bison.tab.h"
     #include "print.h"
@@ -38,7 +40,6 @@ exit            return EXIT;
 [<]=            return LE;
 >=              return GE;
 !=              return NE;
-end             return END;
 
 [0-9]+          { // Обработка найденных чисел
                     yylval.str = new std::string(yytext);
