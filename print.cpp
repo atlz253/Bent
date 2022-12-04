@@ -3,7 +3,7 @@
 
 #include "print.h"
 
-#include <stdio.h>
+#include <iostream>
 #include <stdarg.h>
 
 void debug_print(const char *format, ...)
