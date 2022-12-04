@@ -1,1 +1,14 @@
-from = 0; to = 1000;echo("Zadymai chislo ot ",from," do ",to,", a ya ygodayu\n");while (from <= to) {guess = (from+to)/2;echo("Eto ",guess,"?  (1=menshe, 2=bolshe, 3=popal) ");i = input();if (i==1)to = guess-1;else if (i==2)from = guess+1;else if (i==3) {echo("Yra! Ya molodec!\n");exit;} else echo("Ya nichego ne ponyal!\n");} echo("Vresh, tak ne bivaet!\n");
+print("Hello world!");
+
+count = 100;
+i = 0;
+
+while(i <= count)
+{
+    if (i / 2 != 0)
+    {
+        print(i);
+    }
+
+    i = i + 1;
+}
