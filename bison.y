@@ -180,7 +180,7 @@ std::string replaceAll(const std::string &where, const std::string &what, const 
 %token EQ LE GE NE
 
  // Объявление токена - десятичного числа
-%token STRING NUM ID
+%token STRING NUM ID END
 
 %type<str> ID NUM STRING
 %type<oper> OPS OP1 OP2 OP
@@ -190,11 +190,13 @@ std::string replaceAll(const std::string &where, const std::string &what, const 
  // Разделитель области объявлений и области правил грамматики
 %%
 
-PROGRAM:    OPS  {
+PROGRAM:    OPS END  {
                     debug_print("[Синтаксический анализатор] печать результата\n");
                     $1->print(); 
-                    delete $1; 
+                    delete $1;
+                    return 0; 
                  }
+|           END {return 0;}
 ;
 
 OPS:    OP
