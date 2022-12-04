@@ -1,4 +1,4 @@
-#define DEBUG
+// #define DEBUG
 
 /// @brief Функция отладочной печати
 /// @param format Строка аналогичная по применению printf

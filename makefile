@@ -2,6 +2,9 @@
 all: flex bison
 	g++ lex.yy.c bison.tab.c print.cpp -o compiler
 
+debug:
+	g++ -DDEBUG lex.yy.c bison.tab.c print.cpp -o compiler
+
 # Генерация лексического анализатора
 flex: flex.l
 	flex flex.l
