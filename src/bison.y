@@ -146,6 +146,14 @@ EXPR:    EXPR1
 
                                         $$ = new Assign(*$1, $3); 
                                       }
+
+|         STRING                       {
+                                        std::string s = '"'+replaceAll(*$1, "\n", "\\n")+'"';
+
+                                        $$ = new Value(s);
+
+                                        debug_print("[Синтаксический анализатор] Обнаружена строка %s\n", $1->c_str()); 
+                                      }
 ;
 
 EXPR1:   EXPR2
@@ -282,13 +290,6 @@ ARGS:                                 {
 ;
 
 ARG:     EXPR
-|        STRING                       { 
-                                        std::string s = '"'+replaceAll(*$1, "\n", "\\n")+'"';
-
-                                        $$ = new Value(s);
-
-                                        debug_print("[Синтаксический анализатор] Обнаружена строка %s\n", $1->c_str()); 
-                                      }
 ;
 
  // Разделитель правил грамматики и области объявления функций
