@@ -14,13 +14,21 @@ SRC = tmp\lex.yy.c \
 	  src\main.cpp \
 	  src\expression.cpp
 
-# Сборка транслятора
+# Сборка транслятора bent -> bent
 all: flex bison
 	g++ $(SRC) src\string_bent.cpp -Iinclude -Isrc -o compiler
 
-# сборка отладочной версии транслятора (когда-нибудь я научусь пользоваться переменными в makefile!)
+# сборка отладочной версии транслятора bent -> bent (когда-нибудь я научусь пользоваться переменными в makefile!)
 debug: flex bison
-	g++ -DDEBUG $(SRC) -Iinclude -Isrc -o compiler
+	g++ -DDEBUG $(SRC) src\string_bent.cpp -Iinclude -Isrc -o compiler
+
+# Сборка транслятора bent -> python
+python: flex bison
+	g++ $(SRC) src\string_python.cpp -Iinclude -Isrc -o compiler
+
+# сборка отладочной версии транслятора bent -> python
+pdebug: flex bison
+	g++ -DDEBUG $(SRC) src\string_python.cpp -Iinclude -Isrc -o compiler
 
 mktmp:
 	if not exist "tmp" md "tmp"
