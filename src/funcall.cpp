@@ -2,12 +2,6 @@
 
 #include <iostream>
 
-#define TOKENPASTE(x, y) x ## y
-#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
-#define foreach(i, list) typedef typeof(list) TOKENPASTE2(T,__LINE__); \
-                    for(TOKENPASTE2(T,__LINE__)::iterator i = list.begin(); i != list.end(); i++)
-
-
 Funcall::Funcall(const std::string &name, const std::list<Expression *> &args) : name(name), args(args) 
 {
 }
@@ -15,19 +9,24 @@ Funcall::Funcall(const std::string &name, const std::list<Expression *> &args) :
 void Funcall::print(int indent)
 {
     std::cout << name << "(";
-    foreach (i, args)
+
+    for (std::list<Expression *>::iterator iterator = args.begin(); iterator != args.end(); iterator++)
     {
-        if (i != args.begin())
+        if (iterator != args.begin())
+        {
             std::cout << ", ";
-        (*i)->print();
+        }
+
+        (*iterator)->print();
     }
+
     std::cout << ")";
 }
 
 Funcall::~Funcall()
 {
-    foreach (i, args)
+    for (std::list<Expression *>::iterator iterator = args.begin(); iterator != args.end(); iterator++)
     {
-        delete *i;
+        delete *iterator;
     }
 }

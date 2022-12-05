@@ -2,12 +2,6 @@
 
 #include <iostream>
 
-#define TOKENPASTE(x, y) x##y
-#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
-#define foreach(i, list)                           \
-    typedef typeof(list) TOKENPASTE2(T, __LINE__); \
-    for (TOKENPASTE2(T, __LINE__)::iterator i = list.begin(); i != list.end(); i++)
-
 void Block::Append(Expression *op)
 {
     Block *b = dynamic_cast<Block *>(op);
@@ -40,17 +34,18 @@ int Block::Size()
 
 void Block::print(int indent)
 {
-    foreach (i, ops)
+    for (std::list<Expression *>::iterator iterator = ops.begin(); iterator != ops.end(); iterator++)
     {
         std::cout << std::string(indent, '\t');
-        (*i)->print(indent);
+
+        (*iterator)->print(indent);
     }
 }
 
 Block::~Block()
 {
-    foreach (i, ops)
+    for (std::list<Expression *>::iterator iterator = ops.begin(); iterator != ops.end(); iterator++)
     {
-        delete *i;
+        delete *iterator;
     }
 }
