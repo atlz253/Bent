@@ -10,9 +10,7 @@ std::string Exprop::get_string(int indent)
 {
     std::string str;
 
-    str += expr->get_string();
-
-    str += ";\n";
+    str = expr->get_string() + ";\n";
 
     return str;
 }

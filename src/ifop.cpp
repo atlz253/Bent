@@ -10,24 +10,16 @@ std::string Ifop::get_string(int indent)
 {
     std::string str;
 
-    str += "if ";
-
-    str += cond->get_string(indent);
-
-    str += " {\n";
+    str += "if " + cond->get_string() + "\n" + std::string(indent, '\t') + "{\n";
 
     str += thenops.get_string(indent + 1);
 
     if (elseops.Size())
     {
-        str += std::string(indent, '\t');
-
-        str += "} else {\n";
+        str += std::string(indent, '\t') + "\n}\nelse\n{\n" + elseops.get_string(indent + 1);
     }
 
-    str += std::string(indent, '\t');
-
-    str += "}\n";
+    str += std::string(indent, '\t') + "}\n\n";
 
     return str;
 }

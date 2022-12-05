@@ -4,5 +4,5 @@
 
 std::string Exitop::get_string(int indent)
 {
-    return "exit;";
+    return "exit;\n";
 }

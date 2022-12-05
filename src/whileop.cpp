@@ -10,17 +10,11 @@ std::string Whileop::get_string(int indent)
 {
     std::string str;
 
-    str += "while ";
-
-    str += cond->get_string();
-
-    str += " {\n";
+    str = "while " + cond->get_string() + "\n" + std::string(indent, '\t') + "{\n";
 
     str += ops.get_string(indent + 1);
 
-    str += std::string(indent, '\t');
-
-    str += "}\n";
+    str += std::string(indent, '\t') + "}\n\n";
 
     return str;
 }

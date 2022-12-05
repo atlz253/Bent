@@ -10,11 +10,7 @@ std::string Assign::get_string(int indent)
 {
     std::string str;
 
-    str += name;
-
-    str += " = ";
-
-    str += value->get_string();
+    str = name + " = " + value->get_string();
 
     return str;
 }

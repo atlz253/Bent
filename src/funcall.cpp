@@ -10,9 +10,7 @@ std::string Funcall::get_string(int indent)
 {
     std::string str;
 
-    str += name;
-
-    str += "(";
+    str += name + "(";
 
     for (std::list<Expression *>::iterator iterator = args.begin(); iterator != args.end(); iterator++)
     {

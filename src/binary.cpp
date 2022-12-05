@@ -10,15 +10,7 @@ std::string Binary::get_string(int indent)
 {
     std::string str;
 
-    str += "(";
-
-    str += arg1->get_string();
-
-    str += op;
-
-    str += arg2->get_string();
-
-    str += ")";
+    str += "(" + arg1->get_string() + " " + op + " " + arg2->get_string() + ")";
 
     return str;
 }

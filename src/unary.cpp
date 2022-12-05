@@ -10,11 +10,9 @@ std::string Unary::get_string(int indent)
 {
     std::string str;
 
-    str += op;
+    str = op + arg->get_string();
 
-    str += arg->get_string();
-
-    return "";
+    return str;
 }
 
 Unary::~Unary()
