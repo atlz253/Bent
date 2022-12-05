@@ -15,4 +15,7 @@
 
 #include "print.h"
 
+// Корень синтаксического дерева
+extern Expression* root; 
+
 #endif // BENT_H

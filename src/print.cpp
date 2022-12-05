@@ -24,15 +24,19 @@ void print_help()
     std::cout << std::endl
               << "Транслятор Bent™" << std::endl
               << std::endl
-              << "Превращает великолепный Bent Code™ в Python Code" << std::endl
-              << "------------------------------------------------" << std::endl
+              << "Превращает великолепный Bent Code™ в любой другой (если очень сильно захотеть)" << std::endl
+              << "------------------------------------------------------------------------------" << std::endl
               << std::endl
-              << "--help - Выводит данное сообщение" << std::endl
+              << "--help (-h) - Выводит данное сообщение" << std::endl
+              << std::endl
+              << "--print (-p) - Напечатать результат работы в консоль" << std::endl
+              << std::endl
+              << "--input=\"filename\" (-i) - файл с Bent Code™, который вы хотите транслировать" << std::endl
+              << std::endl
+              << "--output=\"filename\" [out.py] (-i) - выходной файл для записи полученного кода" << std::endl
               << std::endl
               << "Пользоваться данным транслятором достаточно просто:" << std::endl
-              << "./compiler.exe inputFile.b [outputFile.py]" << std::endl
-              << '\t' << "inputFile.b - файл с Bent Code™, который вы хотите транслировать в код на Python" << std::endl
-              << '\t' << "outputFile.py (по умолчанию out.py) - файл для записи полученного кода на Python" << std::endl
+              << "./compiler.exe --input=\"inputFile.bent\" [--output=\"outputFile.py\"]" << std::endl
               << std::endl;
 }
 

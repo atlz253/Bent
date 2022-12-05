@@ -16,6 +16,8 @@
     extern FILE* yyin;
     extern FILE* yyout;
     
+    Expression* root;
+
     extern int yylex();  
 %}
 
@@ -67,11 +69,9 @@
 %%
 
 PROGRAM: OPS                          {
-                                        debug_print("[Синтаксический анализатор] печать результата\n");
-                                    
-                                        $1->print(); 
-                                    
-                                        delete $1;
+                                        debug_print("[Синтаксический анализатор] Синтаксическое дерево успешно собрано\n");
+                                        
+                                        root = $1;
 
                                         return 0; 
                                       }

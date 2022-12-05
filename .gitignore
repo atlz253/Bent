@@ -2,3 +2,4 @@ compiler.exe
 .vscode/*
 *.py
 tmp/*
+*.exe
