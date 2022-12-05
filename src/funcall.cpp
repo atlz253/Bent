@@ -8,11 +8,11 @@
                     for(TOKENPASTE2(T,__LINE__)::iterator i = list.begin(); i != list.end(); i++)
 
 
-Funcall::Funcall(const std::string &name, const std::list<expr_t *> &args) : name(name), args(args) 
+Funcall::Funcall(const std::string &name, const std::list<Expression *> &args) : name(name), args(args) 
 {
 }
 
-void Funcall::print()
+void Funcall::print(int indent)
 {
     std::cout << name << "(";
     foreach (i, args)

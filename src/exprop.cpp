@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Exprop::Exprop(expr_t *expr) : expr(expr)
+Exprop::Exprop(Expression *expr) : expr(expr)
 {
 }
 

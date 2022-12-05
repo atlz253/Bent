@@ -1,21 +1,21 @@
 #ifndef UNARY_H
 #define UNARY_H
 
-#include "abstract.h"
+#include "expression.h"
 
 /// @brief Унарная операция
-class Unary : public expr_t
+class Unary : public Expression
 {
 private:
     const char *op;
-    expr_t *arg;
+    Expression *arg;
 
 public:
-    Unary(const char *op, expr_t *arg);
+    Unary(const char *op, Expression *arg);
     
     /// @brief Печатает блок кода
     /// @param indent Количество отступов 
-    virtual void print();
+    virtual void print(int indent = 0);
 
     virtual ~Unary();
 };

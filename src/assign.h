@@ -3,21 +3,21 @@
 
 #include <string>
 
-#include "abstract.h"
+#include "expression.h"
 
 /// @brief Операция присваивания
-class Assign : public expr_t
+class Assign : public Expression
 {
 private:
     std::string name;
-    expr_t *value;
+    Expression *value;
 
 public:
-    Assign(const std::string &name, expr_t *value);
+    Assign(const std::string &name, Expression *value);
     
     /// @brief Печатает блок кода
     /// @param indent Количество отступов 
-    virtual void print();
+    virtual void print(int indent = 0);
 
     virtual ~Assign();
 };

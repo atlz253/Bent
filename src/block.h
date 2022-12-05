@@ -3,20 +3,20 @@
 
 #include <list>
 
-#include "abstract.h"
+#include "expression.h"
 
 /// @brief Блок кода
-class Block : public oper_t
+class Block : public Expression
 {
-    std::list<oper_t *> ops;
+    std::list<Expression *> ops;
 
 private:
-    void Append(oper_t *op);
+    void Append(Expression *op);
 
 public:
     Block();
-    Block(oper_t *op);
-    Block(oper_t *op1, oper_t *op2);
+    Block(Expression *op);
+    Block(Expression *op1, Expression *op2);
     
     int Size();
 

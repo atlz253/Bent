@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-Assign::Assign(const std::string &name, expr_t *value) : name(name), value(value)
+Assign::Assign(const std::string &name, Expression *value) : name(name), value(value)
 {
 }
 
-void Assign::print()
+void Assign::print(int indent)
 {
     std::cout << name << " = ";
     value->print();

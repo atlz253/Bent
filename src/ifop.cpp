@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Ifop::Ifop(expr_t *cond, oper_t *thenops, oper_t *elseops) : cond(cond), thenops(thenops), elseops(elseops)
+Ifop::Ifop(Expression *cond, Expression *thenops, Expression *elseops) : cond(cond), thenops(thenops), elseops(elseops)
 {
 }
 

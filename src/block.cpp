@@ -8,7 +8,7 @@
     typedef typeof(list) TOKENPASTE2(T, __LINE__); \
     for (TOKENPASTE2(T, __LINE__)::iterator i = list.begin(); i != list.end(); i++)
 
-void Block::Append(oper_t *op)
+void Block::Append(Expression *op)
 {
     Block *b = dynamic_cast<Block *>(op);
     if (b)
@@ -22,12 +22,12 @@ void Block::Append(oper_t *op)
 
 Block::Block() {}
 
-Block::Block(oper_t *op)
+Block::Block(Expression *op)
 {
     Append(op);
 }
 
-Block::Block(oper_t *op1, oper_t *op2)
+Block::Block(Expression *op1, Expression *op2)
 {
     Append(op1);
     Append(op2);

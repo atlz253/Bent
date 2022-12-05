@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-Binary::Binary(const char *op, expr_t *arg1, expr_t *arg2) : op(op), arg1(arg1), arg2(arg2) 
+Binary::Binary(const char *op, Expression *arg1, Expression *arg2) : op(op), arg1(arg1), arg2(arg2) 
 {
 }
 
-void Binary::print()
+void Binary::print(int indent)
 {
     std::cout << "(";
     arg1->print();

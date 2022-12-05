@@ -16,11 +16,11 @@ SRC = tmp\lex.yy.c \
 
 # Сборка транслятора
 all: flex bison
-	g++ $(SRC) -Iinclude -o compiler
+	g++ $(SRC) -Iinclude -Isrc -o compiler
 
 # сборка отладочной версии транслятора (когда-нибудь я научусь пользоваться переменными в makefile!)
 debug: flex bison
-	g++ -DDEBUG $(SRC) -Iinclude -o compiler
+	g++ -DDEBUG $(SRC) -Iinclude -Isrc -o compiler
 
 mktmp:
 	if not exist "tmp" md "tmp"

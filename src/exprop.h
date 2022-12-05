@@ -1,16 +1,16 @@
 #ifndef EXPROP_H
 #define EXPROP_H
 
-#include "abstract.h"
+#include "expression.h"
 
 /// @brief Выражение
-class Exprop : public oper_t
+class Exprop : public Expression
 {
 private:
-    expr_t *expr;
+    Expression *expr;
 
 public:
-    Exprop(expr_t *expr);
+    Exprop(Expression *expr);
 
     /// @brief Печатает блок кода
     /// @param indent Количество отступов 

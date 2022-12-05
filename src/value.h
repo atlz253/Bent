@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "abstract.h"
+#include "expression.h"
 
-class Value : public expr_t
+class Value : public Expression
 {
 private:
     std::string text;
@@ -15,7 +15,7 @@ public:
     
     /// @brief Печатает блок кода
     /// @param indent Количество отступов 
-    virtual void print();
+    virtual void print(int indent = 0);
 };
 
 #endif // VALUE_H

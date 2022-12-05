@@ -4,21 +4,21 @@
 #include <list>
 #include <string>
 
-#include "abstract.h"
+#include "expression.h"
 
 /// @brief Вызов функции
-class Funcall : public expr_t
+class Funcall : public Expression
 {
 private:
     std::string name;
-    std::list<expr_t *> args;
+    std::list<Expression *> args;
 
 public:
-    Funcall(const std::string &name, const std::list<expr_t *> &args);
+    Funcall(const std::string &name, const std::list<Expression *> &args);
     
     /// @brief Печатает блок кода
     /// @param indent Количество отступов 
-    virtual void print();
+    virtual void print(int indent = 0);
 
     virtual ~Funcall();
 };

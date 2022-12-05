@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Whileop::Whileop(expr_t *cond, oper_t *ops) : cond(cond), ops(ops) 
+Whileop::Whileop(Expression *cond, Expression *ops) : cond(cond), ops(ops) 
 {
 }
 

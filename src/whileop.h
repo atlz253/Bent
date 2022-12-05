@@ -2,16 +2,16 @@
 #define WHILEOP_H
 
 #include "block.h"
-#include "abstract.h"
+#include "expression.h"
 
 /// @brief Цикл while
-class Whileop : public oper_t
+class Whileop : public Expression
 {
-    expr_t *cond;
+    Expression *cond;
     Block ops;
 
 public:
-    Whileop(expr_t *cond, oper_t *ops);
+    Whileop(Expression *cond, Expression *ops);
 
     /// @brief Печатает блок кода
     /// @param indent Количество отступов

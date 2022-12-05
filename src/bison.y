@@ -9,19 +9,7 @@
     #include <list>
     #include <iostream>
     
-    #include "print.h"
-
-    #include "ifop.h"
-    #include "block.h"
-    #include "unary.h"
-    #include "value.h"
-    #include "exprop.h"
-    #include "exitop.h"
-    #include "binary.h"
-    #include "assign.h"
-    #include "whileop.h"
-    #include "funcall.h"
-    #include "replace.h"
+    #include "bent.h"
 
     extern int yylineno;
     
@@ -33,15 +21,14 @@
     #include <list>
     #include <string>
 
-    #include "abstract.h"    
+    #include "bent.h"    
 }
 
 %union
 {
     std::string* str;
-    oper_t* oper;
-    expr_t* expr;
-    std::list<expr_t *>* args;
+    Expression* expr;
+    std::list<Expression *>* args;
 }
 
 %token IF ELSE WHILE EXIT
@@ -51,8 +38,7 @@
 %token STRING NUM ID
 
 %type<str> ID NUM STRING
-%type<oper> OPS OP1 OP2 OP
-%type<expr> EXPR EXPR1 EXPR2 TERM VAL ARG
+%type<expr> EXPR EXPR1 EXPR2 TERM VAL ARG OPS OP1 OP2 OP
 %type<args> ARGS
 
  // Разделитель области объявлений и области правил грамматики
@@ -183,14 +169,14 @@ VAL: NUM { $$ = new Value(*$1); }
 ARGS:                                   { 
                                             debug_print("[Синтаксический анализатор] Создание пустых аргументов\n");
 
-                                            $$ = new std::list<expr_t *>();
+                                            $$ = new std::list<Expression *>();
 
                                             $$->clear(); 
                                         }
 |       ARG                             {
                                             debug_print("[Синтаксический анализатор] Создание аргументов\n");
 
-                                            $$ = new std::list<expr_t *>();
+                                            $$ = new std::list<Expression *>();
 
                                             $$->clear(); 
 

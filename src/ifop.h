@@ -2,16 +2,16 @@
 #define IFOP_H
 
 #include "block.h"
-#include "abstract.h"
+#include "expression.h"
 
-class Ifop : public oper_t
+class Ifop : public Expression
 {
 private:
-    expr_t *cond;
+    Expression *cond;
     Block thenops, elseops;
 
 public:
-    Ifop(expr_t *cond, oper_t *thenops, oper_t *elseops);
+    Ifop(Expression *cond, Expression *thenops, Expression *elseops);
     
     /// @brief Печатает блок кода
     /// @param indent Количество отступов
