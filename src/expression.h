@@ -19,12 +19,12 @@ public:
 
     /// @brief Печатает выражение в терминал
     /// @param indent Количество отступов
-    virtual void print(int indent = 0);
+    virtual void print();
 
     /// @brief Записать выражение в файл
     /// @param file Ссылка на файл
     /// @param indent Количество отступов
-    virtual void write(FILE *file, int indent = 0);
+    virtual void write(FILE *file);
 };
 
 #endif // ABSTRACT_H
