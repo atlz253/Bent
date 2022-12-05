@@ -18,11 +18,13 @@
  // Опции генератора
  //
 
- // Создать переменную int yylineno, в которой будет храниться номер текущей строки (удобна для отладки)
+ // Создает переменную int yylineno, в которой будет храниться номер текущей строки (удобна для отладки)
 %option yylineno
 
+ // Отключает фнкцию для переключения между входными файлами
 %option noyywrap
 
+ // Объявление режима для обработки строк
 %x STR
 
  // разделитель области объявлений и области правил языка
@@ -31,42 +33,42 @@
  // Правила языка
  // В каждом правиле слева пишется регулярное выражение, справа — код на С
 
-[/][/].*\n      ; // Если встретили комментарий, то ничего не делаем
+[/][/].*\n             ; // Если встретили комментарий, то ничего не делаем
 
-if              return IF;
-else            return ELSE;
-while           return WHILE;
-exit            return EXIT;
-==              return EQ;
-[<]=            return LE;
->=              return GE;
-!=              return NE;
+if                     return IF;
+else                   return ELSE;
+while                  return WHILE;
+exit                   return EXIT;
+==                     return EQ;
+[<]=                   return LE;
+>=                     return GE;
+!=                     return NE;
 
-[0-9]+          { // Обработка найденных чисел
-                    yylval.str = new std::string(yytext);
+[0-9]+                 { // Обработка числовых значений
+                            yylval.str = new std::string(yytext);
                   
-                    debug_print("[Лексический анализатор] найдена числовая лексема: %s\n", yylval.str->c_str());
+                            debug_print("[Лексический анализатор] найдено числовое значение: %s\n", yylval.str->c_str());
 
-                    return NUM;  
-                }
+                            return NUM;  
+                       }
 
-[a-zA-Z_][a-zA-Z0-9_]*  { 
+[a-zA-Z_][a-zA-Z0-9_]* { // Обработка символьных значений
                             yylval.str = new std::string(yytext);
                             
                             debug_print("[Лексический анализатор] найден новый ID: %s\n", yylval.str->c_str());
 
                             return ID;
-                        }
+                       }
 
-["]                     {
+["]                    { // Начало обработки строки
                             yylval.str = new std::string(); 
                             
                             debug_print("[Лексический анализатор] обнаружена строка\n");
 
                             BEGIN(STR); 
-                        }
+                       }
 
-<STR>[^\\\n"]+  {
+<STR>[^\\\n"]+         { // Обработка основных символов в строке
                             int i = 0;
 
                             while (yytext[i] != 0)
@@ -75,41 +77,44 @@ exit            return EXIT;
                             }
 
                             debug_print("[Лексический анализатор] добавлена последовательность символов к строке: %s\n", yylval.str->c_str());
-                }
+                       }
 
-<STR>\\n        {
+<STR>\\n               { // Обработка символа переноса строки
                             yylval.str->push_back('\n');
 
                             debug_print("[Лексический анализатор] добавлен символ переноса текста в строку\n");
-                }
+                       }
 
-<STR>\\["]      {
-                    debug_print("[Лексический анализатор] обнаружены \" в строке\n");
+<STR>\\["]             { // Обработка кавычек в строке
+                            debug_print("[Лексический анализатор] обнаружены \" в строке\n");
 
-                    yylval.str->push_back('"');
-                }
+                            yylval.str->push_back('"');
+                       }
 
-<STR>\\         yyerror("Invalid escape sequence");
+<STR>\\                {
+                            yyerror("Неверная escape последовательность");
+                       }
 
-<STR>\n         yyerror("Newline in string literal");
+<STR>\n                {
+                            yyerror("Перенос строки в литерале");
+                       }
 
-<STR>["]        { 
-                    debug_print("[Лексический анализатор] конец строки: %s\n", yylval.str->c_str());
+<STR>["]               { // Конец обработки строки
+                            debug_print("[Лексический анализатор] конец строки: %s\n", yylval.str->c_str());
 
-                    BEGIN(INITIAL); 
+                            BEGIN(INITIAL); 
                     
-                    return STRING; 
-                }
+                            return STRING; 
+                       }
 
-[ \t\r\n]       ; // Игнорируем проблемы и переходы на новую строку
+[ \t\r\n]              ; // Игнорируем проблемы и переходы на новую строку
 
-[-{};()=<>+*/!,] { return *yytext; }
+[-{};()=<>+*/!,]       { // Возврат символьних лексем 
+                            return *yytext; 
+                       }
 
-.               { 
-                    yyerror("Invalid character");
-                    // debug_print("[Лексический анализатор] найдена символьная лексема: %c\n", *yytext);
-
-                    // return *yytext; 
-                }
+.                      { 
+                            yyerror("Неизвестный символ");
+                       }
 
 %%
