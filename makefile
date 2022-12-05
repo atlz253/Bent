@@ -5,7 +5,6 @@ SRC = tmp\lex.yy.c \
 	  src\exprop.cpp \
 	  src\ifop.cpp \
 	  src\whileop.cpp \
-	  src\exitop.cpp \
 	  src\binary.cpp \
 	  src\assign.cpp \
 	  src\funcall.cpp \
@@ -17,7 +16,7 @@ SRC = tmp\lex.yy.c \
 
 # Сборка транслятора
 all: flex bison
-	g++ $(SRC) -Iinclude -Isrc -o compiler
+	g++ $(SRC) src\string_bent.cpp -Iinclude -Isrc -o compiler
 
 # сборка отладочной версии транслятора (когда-нибудь я научусь пользоваться переменными в makefile!)
 debug: flex bison

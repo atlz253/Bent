@@ -32,20 +32,6 @@ int Block::Size()
     return ops.size();
 }
 
-std::string Block::get_string(int indent)
-{
-    std::string str;
-
-    for (std::list<Expression *>::iterator iterator = ops.begin(); iterator != ops.end(); iterator++)
-    {
-        str += std::string(indent, '\t');
-
-        str += (*iterator)->get_string(indent);
-    }
-
-    return str;
-}
-
 Block::~Block()
 {
     for (std::list<Expression *>::iterator iterator = ops.begin(); iterator != ops.end(); iterator++)
