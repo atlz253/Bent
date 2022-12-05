@@ -1,10 +1,26 @@
+SRC = tmp\lex.yy.c \
+	  tmp\bison.tab.c \
+	  src\print.cpp \
+	  src\block.cpp \
+	  src\exprop.cpp \
+	  src\ifop.cpp \
+	  src\whileop.cpp \
+	  src\exitop.cpp \
+	  src\binary.cpp \
+	  src\assign.cpp \
+	  src\funcall.cpp \
+	  src\unary.cpp \
+	  src\value.cpp \
+	  src\replace.cpp \
+	  src\main.cpp
+
 # Сборка транслятора
 all: flex bison
-	g++ tmp\lex.yy.c tmp\bison.tab.c src\print.cpp -o compiler
+	g++ $(SRC) -Iinclude -o compiler
 
 # сборка отладочной версии транслятора (когда-нибудь я научусь пользоваться переменными в makefile!)
 debug: flex bison
-	g++ -DDEBUG tmp\lex.yy.c tmp\bison.tab.c src\print.cpp -o compiler
+	g++ -DDEBUG $(SRC) -Iinclude -o compiler
 
 mktmp:
 	if not exist "tmp" md "tmp"

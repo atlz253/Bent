@@ -8,160 +8,24 @@
 %{
     #include <list>
     #include <iostream>
-    #include <windows.h>
+    
+    #include "print.h"
 
-    #include "../include/flex.h"
-    #include "../include/print.h"
-    #include "../include/abstract.h"   
-
-    #define TOKENPASTE(x, y) x ## y
-#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
-#define foreach(i, list) typedef typeof(list) TOKENPASTE2(T,__LINE__); \
-                    for(TOKENPASTE2(T,__LINE__)::iterator i = list.begin(); i != list.end(); i++)
+    #include "ifop.h"
+    #include "block.h"
+    #include "unary.h"
+    #include "value.h"
+    #include "exprop.h"
+    #include "exitop.h"
+    #include "binary.h"
+    #include "assign.h"
+    #include "whileop.h"
+    #include "funcall.h"
+    #include "replace.h"
 
     extern int yylineno;
-    extern int yylex();
-
-    extern FILE* yyin;
-    extern FILE* yyout;
-
-    class block : public oper_t {
-        std::list<oper_t*> ops;
-        void append(oper_t* op) {
-            block* b = dynamic_cast<block*>(op);
-            if(b) {
-                ops.splice(ops.end(), b->ops, b->ops.begin(), b->ops.end());
-                delete b;
-            }
-            else ops.push_back(op);
-        }
-        public:
-            block() {}
-            block(oper_t* op) { append(op); }
-            block(oper_t* op1, oper_t* op2) { append(op1); append(op2); }
-        int size() { return ops.size(); }
-        virtual void print(int indent=0) {
-            foreach(i, ops) {
-                std::cout << std::string(indent, '\t');
-                (*i)->print(indent);
-            }
-        }
-        virtual ~block() { foreach(i, ops) delete *i; }
-    };
-
-    class exprop : public oper_t {
-        expr_t* expr;
-        public: exprop(expr_t* expr) : expr(expr) {}
-        virtual void print(int indent=0) {
-            expr->print();
-            std::cout << ";" << std::endl;
-        }
-        virtual ~exprop() { delete expr; }
-    };
-
-    class ifop : public oper_t {
-        expr_t* cond;
-        block thenops, elseops;
-        public: ifop(expr_t* cond, oper_t* thenops, oper_t* elseops) :
-                cond(cond), thenops(thenops), elseops(elseops) {}
-        virtual void print(int indent=0) {
-            std::cout << "if "; cond->print();  std::cout << " {" << std::endl;
-            thenops.print(indent+1);
-            if (elseops.size()) {
-                std::cout << std::string(indent, '\t') << "} else {" << std::endl;
-                elseops.print(indent+1);
-            }
-            std::cout << std::string(indent, '\t') << "}" << std::endl;
-        }
-        virtual ~ifop() { delete cond; }
-    };
-
-    class whileop : public oper_t {
-        expr_t* cond;
-        block ops;
-        public: whileop(expr_t* cond, oper_t* ops) : cond(cond), ops(ops) {}
-        virtual void print(int indent=0) {
-            std::cout << "while "; cond->print();  std::cout << " {" << std::endl;
-            ops.print(indent+1);
-            std::cout << std::string(indent, '\t') << "}" << std::endl;
-        }
-        virtual ~whileop() { delete cond; }
-    };
-
-    class exitop : public oper_t {
-        virtual void print(int indent=0) { std::cout << "exit;" << std::endl; }
-    };
-
-    class binary : public expr_t {
-        const char* op;
-        expr_t *arg1, *arg2;
-        public: binary(const char* op, expr_t *arg1, expr_t *arg2) :
-                op(op), arg1(arg1), arg2(arg2) {}
-        virtual void print() {
-            std::cout<<"(";
-            arg1->print();
-            std::cout<<op;
-            arg2->print();
-            std::cout<<")";
-        }
-        virtual ~binary() { delete arg1; delete arg2; }
-    };
-
-    class assign : public expr_t {
-        std::string name;
-        expr_t* value;
-        public: assign(const std::string& name, expr_t* value) :
-                name(name), value(value) {}
-        virtual void print() { std::cout<<name<<" = "; value->print(); }
-        virtual ~assign() { delete value; }
-    };
-
-    class unary : public expr_t {
-        const char* op;
-        expr_t* arg;
-        public: unary(const char* op, expr_t* arg) : op(op), arg(arg) {}
-        virtual void print() { std::cout<<op; arg->print(); }
-        virtual ~unary() { delete arg; }
-    };
-
-    class funcall : public expr_t {
-        std::string name;
-        std::list<expr_t*> args;
-        public: funcall(const std::string& name,
-                const std::list<expr_t*>& args) :
-                name(name), args(args) {}
-        virtual void print() {
-            std::cout<<name<<"(";
-            foreach(i,args) {
-                if (i!=args.begin())
-                    std::cout<<", ";
-                (*i)->print();
-            }
-            std::cout<<")";
-        }
-        virtual ~funcall() { foreach(i,args) delete *i; }
-    };
-
-    class value : public expr_t {
-        std::string text;
-        public: value(const std::string& text) : text(text) {}
-        virtual void print() { std::cout<<text; }
-    };
-
-
-
-// глобальная замена
-std::string replaceAll(const std::string &where, const std::string &what, const std::string &withWhat)
-{
-    std::string result = where;
-    while (1)
-    {
-        int pos = result.find(what);
-        if (pos == -1)
-            return result;
-        result.replace(pos, what.size(), withWhat);
-    }
-}
+    
+    extern int yylex();  
 %}
 
 %code requires
@@ -169,7 +33,7 @@ std::string replaceAll(const std::string &where, const std::string &what, const 
     #include <list>
     #include <string>
 
-    #include "../include/abstract.h"    
+    #include "abstract.h"    
 }
 
 %union
@@ -205,7 +69,7 @@ PROGRAM:    OPS {
 OPS:    OP
 |       OPS OP { 
                     debug_print("[Синтаксический анализатор] новый блок кода\n");
-                    $$ = new block($1, $2); 
+                    $$ = new Block($1, $2); 
                 }
 ;
 
@@ -216,35 +80,35 @@ OP1: '{' OPS '}' { $$ = $2; }
 |       EXPR ';'                        {
                                             debug_print("[Синтаксический анализатор] Обнаружен конец команды\n");
 
-                                            $$ = new exprop($1); 
+                                            $$ = new Exprop($1); 
                                         }
 |       IF '(' EXPR ')' OP1 ELSE OP1    { 
                                             debug_print("[Синтаксический анализатор] Обнаружено ветвление\n");
 
-                                            $$ = new ifop($3, $5, $7); 
+                                            $$ = new Ifop($3, $5, $7); 
                                         }
 |       WHILE '(' EXPR ')' OP1          {
                                             debug_print("[Синтаксический анализатор] Обнаружен цикл\n");
 
-                                            $$ = new whileop($3, $5); 
+                                            $$ = new Whileop($3, $5); 
                                         }
 |       EXIT ';'                        {
                                             debug_print("[Синтаксический анализатор] Обнаружен оператор выхода\n");
 
-                                            $$ = new exitop(); 
+                                            $$ = new Exitop(); 
                                         }
 ;
 
-OP2: IF '(' EXPR ')' OP              { $$ = new ifop($3, $5, new block()); }
-|       IF '(' EXPR ')' OP1 ELSE OP2    { $$ = new ifop($3, $5, $7); }
-|       WHILE '(' EXPR ')' OP2          { $$ = new whileop($3, $5); }
+OP2: IF '(' EXPR ')' OP              { $$ = new Ifop($3, $5, new Block()); }
+|       IF '(' EXPR ')' OP1 ELSE OP2    { $$ = new Ifop($3, $5, $7); }
+|       WHILE '(' EXPR ')' OP2          { $$ = new Whileop($3, $5); }
 ;
 
 EXPR: EXPR1
 |       ID '=' EXPR                     {
                                             debug_print("[Синтаксический анализатор] Обнаружено присваивание в переменную %s\n", $1->c_str());
 
-                                            $$ = new assign(*$1, $3); 
+                                            $$ = new Assign(*$1, $3); 
                                         }
 ;
 
@@ -252,32 +116,32 @@ EXPR1: EXPR2
 |       EXPR1 EQ EXPR2                  {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сравнения (равно)\n");
 
-                                            $$ = new binary("==", $1, $3); 
+                                            $$ = new Binary("==", $1, $3); 
                                         }
 |       EXPR1 LE EXPR2                  { 
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сравнения (меньше либо равно)\n");
 
-                                            $$ = new binary("<=", $1, $3); 
+                                            $$ = new Binary("<=", $1, $3); 
                                         }
 |       EXPR1 GE EXPR2                  {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сравнения (больше либо равно)\n");
 
-                                            $$ = new binary(">=", $1, $3); 
+                                            $$ = new Binary(">=", $1, $3); 
                                         }
 |       EXPR1 NE EXPR2                  {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сравнения (не равно)\n");
 
-                                            $$ = new binary("!=", $1, $3); 
+                                            $$ = new Binary("!=", $1, $3); 
                                         }
 |       EXPR1 '>' EXPR2                 {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сравнения (больше)\n");
 
-                                            $$ = new binary(">", $1, $3); 
+                                            $$ = new Binary(">", $1, $3); 
                                         }
 |       EXPR1 '<' EXPR2                 {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сравнения (меньше)\n");
 
-                                            $$ = new binary("<", $1, $3); 
+                                            $$ = new Binary("<", $1, $3); 
                                         }
 ;
 
@@ -285,12 +149,12 @@ EXPR2: TERM
 |       EXPR2 '+' TERM                  {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция сложения\n");
 
-                                            $$ = new binary("+", $1, $3); 
+                                            $$ = new Binary("+", $1, $3); 
                                         }
 |       EXPR2 '-' TERM                  { 
                                             debug_print("[Синтаксический анализатор] Обнаружена операция вычитания\n");
 
-                                            $$ = new binary("-", $1, $3); 
+                                            $$ = new Binary("-", $1, $3); 
                                         }
 ;
 
@@ -298,21 +162,21 @@ TERM: VAL
 |       TERM '*' VAL                    {
                                             debug_print("[Синтаксический анализатор] Обнаружена операция умножения\n");
 
-                                            $$ = new binary("*", $1, $3); 
+                                            $$ = new Binary("*", $1, $3); 
                                         }
 |       TERM '/' VAL                    { 
                                             debug_print("[Синтаксический анализатор] Обнаружена операция деления\n");
 
-                                            $$ = new binary("/", $1, $3); 
+                                            $$ = new Binary("/", $1, $3); 
                                         }
 ;
 
-VAL: NUM { $$ = new value(*$1); }
-|       '-' VAL                         { $$ = new unary("-", $2); }
-|       '!' VAL                         { $$ = new unary("!", $2); }
+VAL: NUM { $$ = new Value(*$1); }
+|       '-' VAL                         { $$ = new Unary("-", $2); }
+|       '!' VAL                         { $$ = new Unary("!", $2); }
 |       '(' EXPR ')'                    { $$ = $2; }
-|       ID                              { $$ = new value(*$1); }
-|       ID '(' ARGS ')'                 { $$=new funcall(*$1, *$3); }
+|       ID                              { $$ = new Value(*$1); }
+|       ID '(' ARGS ')'                 { $$=new Funcall(*$1, *$3); }
 ;
 ;
 
@@ -345,62 +209,10 @@ ARG:    EXPR
 |       STRING                          { 
                                             std::string s = '"'+replaceAll(*$1, "\n", "\\n")+'"';
 
-                                            $$=new value(s);
+                                            $$=new Value(s);
 
                                             debug_print("[Синтаксический анализатор] Обнаружена строка %s\n", $1->c_str()); 
                                         }
 ;
 
 %%
-
-void print_help()
-{
-    std::cout << std::endl << "Транслятор Bent™" << std::endl << std::endl
-              << "Превращает великолепный Bent Code™ в Python Code" << std::endl
-              << "------------------------------------------------" << std::endl << std::endl
-              << "--help - Выводит данное сообщение" << std::endl << std::endl
-              << "Пользоваться данным транслятором достаточно просто:" << std::endl
-              << "./compiler.exe inputFile.b [outputFile.py]"  << std::endl
-              << '\t' << "inputFile.b - файл с Bent Code™, который вы хотите транслировать в код на Python" << std::endl
-              << '\t' << "outputFile.py (по умолчанию out.py) - файл для записи полученного кода на Python" << std::endl << std::endl;
-}
-
- // Точка входа в сгенерированный анализатор
-int main(int argc, char *argv[])
-{
-    SetConsoleOutputCP(CP_UTF8);
-
-    if (argc == 2 && !strcmp(argv[1], "--help"))
-    {
-        print_help();
-    }
-    else if (argc == 3 || argc == 2)
-    {
-        const char* inputFileName = argv[1];
-
-        if ((yyin = fopen(inputFileName, "r")) == NULL)
-        {
-            yyerror("Не удалось открыть входной файл");
-
-            return -1;
-        }
-
-        const char* outFileName = (argc == 2) ? "out.py" : argv[2];
-
-        if ((yyout = fopen(outFileName, "w")) == NULL)
-        {
-            yyerror("Не удалось открыть выходной файл");
-
-            return -1;
-        }
-
-        yyparse();
-    }
-    else
-    {
-        print_help();
-    }
-
-   
-    return 0;
-}

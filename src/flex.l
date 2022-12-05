@@ -6,11 +6,12 @@
  //
 
 %{
-    #include "../include/flex.h"
+    #include "flex.h"
 
     #include <string>
+
+    #include "print.h"
     #include "bison.tab.h"
-    #include "../include/print.h"
 %}
 
  //

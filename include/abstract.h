@@ -9,6 +9,9 @@ protected:
 
 public:
     virtual ~oper_t() {}
+
+    /// @brief Печатает блок кода
+    /// @param indent Количество отступов 
     virtual void print(int indent = 0) = 0;
 };
 
