@@ -10,9 +10,9 @@
     #include <iostream>
     #include <windows.h>
 
-    #include "flex.h"
-    #include "print.h"
-    #include "abstract.h"   
+    #include "../include/flex.h"
+    #include "../include/print.h"
+    #include "../include/abstract.h"   
 
     #define TOKENPASTE(x, y) x ## y
 #define TOKENPASTE2(x, y) TOKENPASTE(x, y)
@@ -169,7 +169,7 @@ std::string replaceAll(const std::string &where, const std::string &what, const 
     #include <list>
     #include <string>
 
-    #include "abstract.h"    
+    #include "../include/abstract.h"    
 }
 
 %union

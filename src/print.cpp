@@ -1,7 +1,7 @@
 #ifndef DEBUG_PRINT
 #define DEBUG_PRINT
 
-#include "print.h"
+#include "../include/print.h"
 
 #include <iostream>
 #include <stdarg.h>

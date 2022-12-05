@@ -1,8 +1,4 @@
-lex.yy.c
-a.exe
-y.tab.c
-bison.tab.c
-bison.tab.h
 compiler.exe
-.vscode/settings.json
+.vscode/*
 *.py
+tmp/*
