@@ -6,10 +6,15 @@ Exprop::Exprop(Expression *expr) : expr(expr)
 {
 }
 
-void Exprop::print(int indent)
+std::string Exprop::get_string(int indent)
 {
-    expr->print();
-    std::cout << ";" << std::endl;
+    std::string str;
+
+    str += expr->get_string();
+
+    str += ";\n";
+
+    return str;
 }
 
 Exprop::~Exprop()

@@ -6,10 +6,15 @@ Unary::Unary(const char *op, Expression *arg) : op(op), arg(arg)
 {
 }
 
-void Unary::print(int indent)
+std::string Unary::get_string(int indent)
 {
-    std::cout << op;
-    arg->print();
+    std::string str;
+
+    str += op;
+
+    str += arg->get_string();
+
+    return "";
 }
 
 Unary::~Unary()

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void Exitop::print(int indent) 
-{ 
-    std::cout << "exit;" << std::endl; 
+std::string Exitop::get_string(int indent)
+{
+    return "exit;";
 }

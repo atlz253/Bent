@@ -6,13 +6,21 @@ Binary::Binary(const char *op, Expression *arg1, Expression *arg2) : op(op), arg
 {
 }
 
-void Binary::print(int indent)
+std::string Binary::get_string(int indent)
 {
-    std::cout << "(";
-    arg1->print();
-    std::cout << op;
-    arg2->print();
-    std::cout << ")";
+    std::string str;
+
+    str += "(";
+
+    str += arg1->get_string();
+
+    str += op;
+
+    str += arg2->get_string();
+
+    str += ")";
+
+    return str;
 }
 
 Binary::~Binary()

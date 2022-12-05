@@ -6,18 +6,30 @@ Ifop::Ifop(Expression *cond, Expression *thenops, Expression *elseops) : cond(co
 {
 }
 
-void Ifop::print(int indent)
+std::string Ifop::get_string(int indent)
 {
-    std::cout << "if ";
-    cond->print();
-    std::cout << " {" << std::endl;
-    thenops.print(indent + 1);
+    std::string str;
+
+    str += "if ";
+
+    str += cond->get_string(indent);
+
+    str += " {\n";
+
+    str += thenops.get_string(indent + 1);
+
     if (elseops.Size())
     {
-        std::cout << std::string(indent, '\t') << "} else {" << std::endl;
-        elseops.print(indent + 1);
+        str += std::string(indent, '\t');
+
+        str += "} else {\n";
     }
-    std::cout << std::string(indent, '\t') << "}" << std::endl;
+
+    str += std::string(indent, '\t');
+
+    str += "}\n";
+
+    return str;
 }
 
 Ifop::~Ifop()

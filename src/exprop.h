@@ -12,10 +12,11 @@ private:
 public:
     Exprop(Expression *expr);
 
-    /// @brief Печатает блок кода
-    /// @param indent Количество отступов 
-    virtual void print(int indent = 0);
-    
+    /// @brief Возвращает строку с выражением
+    /// @param indent Количество отступов
+    /// @return Строка кода
+    std::string get_string(int indent = 0) override;
+
     virtual ~Exprop();
 };
 

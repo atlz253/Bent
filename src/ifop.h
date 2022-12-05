@@ -12,11 +12,12 @@ private:
 
 public:
     Ifop(Expression *cond, Expression *thenops, Expression *elseops);
-    
-    /// @brief Печатает блок кода
+
+    /// @brief Возвращает строку с выражением
     /// @param indent Количество отступов
-    virtual void print(int indent = 0);
-    
+    /// @return Строка кода
+    std::string get_string(int indent = 0) override;
+
     virtual ~Ifop();
 };
 

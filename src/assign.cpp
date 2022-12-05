@@ -6,10 +6,17 @@ Assign::Assign(const std::string &name, Expression *value) : name(name), value(v
 {
 }
 
-void Assign::print(int indent)
+std::string Assign::get_string(int indent)
 {
-    std::cout << name << " = ";
-    value->print();
+    std::string str;
+
+    str += name;
+
+    str += " = ";
+
+    str += value->get_string();
+
+    return str;
 }
 
 Assign::~Assign()

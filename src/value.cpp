@@ -6,7 +6,7 @@ Value::Value(const std::string &text) : text(text)
 {
 }
 
-void Value::print(int indent)
+std::string Value::get_string(int indent)
 {
-    std::cout << text;
+    return text;
 }

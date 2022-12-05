@@ -12,6 +12,9 @@
     #include "bent.h"
 
     extern int yylineno;
+
+    extern FILE* yyin;
+    extern FILE* yyout;
     
     extern int yylex();  
 %}

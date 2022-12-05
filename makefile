@@ -12,7 +12,8 @@ SRC = tmp\lex.yy.c \
 	  src\unary.cpp \
 	  src\value.cpp \
 	  src\replace.cpp \
-	  src\main.cpp
+	  src\main.cpp \
+	  src\expression.cpp
 
 # Сборка транслятора
 all: flex bison

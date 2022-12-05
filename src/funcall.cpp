@@ -6,21 +6,27 @@ Funcall::Funcall(const std::string &name, const std::list<Expression *> &args) :
 {
 }
 
-void Funcall::print(int indent)
+std::string Funcall::get_string(int indent)
 {
-    std::cout << name << "(";
+    std::string str;
+
+    str += name;
+
+    str += "(";
 
     for (std::list<Expression *>::iterator iterator = args.begin(); iterator != args.end(); iterator++)
     {
         if (iterator != args.begin())
         {
-            std::cout << ", ";
+            str += ", ";
         }
 
-        (*iterator)->print();
+        str += (*iterator)->get_string();
     }
 
-    std::cout << ")";
+    str += ")";
+
+    return str;
 }
 
 Funcall::~Funcall()
