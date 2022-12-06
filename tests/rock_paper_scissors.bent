@@ -1,0 +1,79 @@
+import random
+
+print("Игра «Камень Ножницы Бумага»");
+
+choice = int(input("Ваш выбор (0 - камень 1 - ножницы 2 - бумага)"));
+
+enemy = random.randint(0, 2);
+
+if (enemy == 0)
+{
+    if (choice == 0)
+    {
+        print("Ничья (камень vs камень)!");
+
+        exit;
+    }
+
+    if (choice == 1)
+    {
+        print("Вы проиграли (ножницы vs камень)!");
+
+        exit;
+    }
+
+    if (choice == 2)
+    {
+        print("Вы победили (бумага vs камень)!");
+
+        exit;
+    }
+}
+
+if (enemy == 1)
+{
+    if (choice == 0)
+    {
+        print("Вы победили (камень vs ножницы)!");
+
+        exit;
+    }
+
+    if (choice == 1)
+    {
+        print("Ничья (ножницы vs ножницы)!");
+
+        exit;
+    }
+
+    if (choice == 2)
+    {
+        print("Вы проиграли (бумага vs ножницы)!");
+
+        exit;
+    }
+}
+
+if (enemy == 2)
+{
+    if (choice == 0)
+    {
+        print("Вы проиграли (камень vs бумага)!");
+
+        exit;
+    }
+
+    if (choice == 1)
+    {
+        print("Вы победили (ножницы vs бумага)!");
+
+        exit;
+    }
+
+    if (choice == 2)
+    {
+        print("Ничья (бумага vs бумага)!");
+
+        exit;
+    }
+}

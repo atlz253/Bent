@@ -2,10 +2,12 @@
 #include "unary.h"
 #include "block.h"
 #include "value.h"
+#include "chain.h"
 #include "assign.h"
 #include "binary.h"
 #include "exitop.h"
 #include "exprop.h"
+#include "import.h"
 #include "funcall.h"
 #include "whileop.h"
 
@@ -117,6 +119,30 @@ std::string Whileop::get_string(int indent)
     str += ops.get_string(indent + 1);
 
     // str += std::string(indent, '\t') + "}\n\n";
+
+    return str;
+}
+
+std::string Import::get_string(int indent)
+{
+    return std::string("import ") + id->get_string() + "\n";
+}
+
+std::string Chain::get_string(int indent)
+{
+    std::string str;
+
+    for (std::list<Expression *>::iterator iterator = ops.begin(); iterator != ops.end(); iterator++)
+    {
+        if (iterator != ops.begin())
+        {
+            str += '.';
+        }
+
+        str += std::string(indent, '\t');
+
+        str += (*iterator)->get_string(indent);
+    }
 
     return str;
 }

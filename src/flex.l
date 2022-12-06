@@ -39,6 +39,7 @@ if                     return IF;
 else                   return ELSE;
 while                  return WHILE;
 exit                   return EXIT;
+import                 return IMPORT;
 ==                     return EQ;
 [<]=                   return LE;
 >=                     return GE;
@@ -109,7 +110,7 @@ exit                   return EXIT;
 
 [ \t\r\n]              ; // Игнорируем проблемы и переходы на новую строку
 
-[-{};()=<>+*/!,]       { // Возврат символьних лексем 
+[-{};()=<>+*/!,.]       { // Возврат символьних лексем 
                             return *yytext; 
                        }
 

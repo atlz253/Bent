@@ -12,7 +12,9 @@ SRC = tmp\lex.yy.c \
 	  src\value.cpp \
 	  src\replace.cpp \
 	  src\main.cpp \
-	  src\expression.cpp
+	  src\expression.cpp \
+	  src\import.cpp \
+	  src\chain.cpp
 
 # Сборка транслятора bent -> bent
 all: flex bison

@@ -44,7 +44,7 @@
 %token EQ LE GE NE
 
  // Типы и именованные конструкции
-%token STRING NUM ID
+%token STRING NUM ID IMPORT
 
  //
  // Возможные типы стека 
@@ -101,6 +101,12 @@ OP1:     '{' OPS '}'                  {
                                         $$ = new Exprop($1); 
                                       }
 
+|        IMPORT EXPR                  {
+                                        debug_print("[Синтаксический анализатор] Обнаружен импорт модуля\n");
+
+                                        $$ = new Import($2);
+                                      }
+
 |        IF '(' EXPR ')' OP1 ELSE OP1 { 
                                         debug_print("[Синтаксический анализатор] Обнаружено ветвление if-else\n");
 
@@ -147,13 +153,20 @@ EXPR:    EXPR1
                                         $$ = new Assign(*$1, $3); 
                                       }
 
-|         STRING                       {
+|         STRING                      {
                                         std::string s = '"'+replaceAll(*$1, "\n", "\\n")+'"';
 
                                         $$ = new Value(s);
 
                                         debug_print("[Синтаксический анализатор] Обнаружена строка %s\n", $1->c_str()); 
                                       }
+
+|        TERM '.' TERM                {
+                                        debug_print("[Синтаксический анализатор] Обнаружена цепочка вызовов\n");
+
+                                        $$ = new Chain($1, $3);
+                                      }
+
 ;
 
 EXPR1:   EXPR2
